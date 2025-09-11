@@ -7,11 +7,12 @@ export default function KillerLaptopScene() {
 	return (
 		<div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0 }}>
 			<Canvas camera={{ position: [3, 2, 4], fov: 40 }} shadows>
-				<color attach="background" args={[0.96, 0.96, 0.96]} />
+				{/* Dark-to-light background helps sell stylized contrast */}
+				<color attach="background" args={[0.06, 0.06, 0.10]} />
 				<ambientLight intensity={0.25} />
 				<directionalLight
 					position={[5, 8, 5]}
-					intensity={2.0}
+					intensity={2.4}
 					castShadow
 					shadow-mapSize-width={1024}
 					shadow-mapSize-height={1024}

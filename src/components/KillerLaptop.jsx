@@ -2,6 +2,7 @@ import { useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
+import { ThreeBandToonMaterial } from '../materials/ThreeBandToonMaterial'
 import omgImage from '../assets/omg.png'
 
 /**
@@ -57,7 +58,7 @@ function Keyboard({ gradientMap, keyColor = '#ffffff', rows = 5, cols = 14 }) {
 			{layout.positions.map((p, i) => (
 				<mesh key={i} position={[p[0], 0, p[2]]} castShadow>
 					<boxGeometry args={[layout.keySize, 0.02, layout.keySize]} />
-					<meshToonMaterial color={keyColor} gradientMap={gradientMap} />
+					<threeBandToonMaterial colorA={'#000000'} colorB={'#514f8f'} colorC={'#a99d9b'} t1={0.33} t2={0.66} lightDir={[5,8,5]} />
 				</mesh>
 			))}
 		</group>
@@ -74,14 +75,14 @@ function Lid({ gradientMap, bodyColor, texture, openRadians = -0.6 }) {
 			{/* Hinge cylinder along X axis */}
 			<mesh rotation={[0, 0, Math.PI * 0.5]} position={[0, 0, 0]} castShadow>
 				<cylinderGeometry args={[0.035, 0.035, 2.2, 16]} />
-				<meshToonMaterial color={bodyColor} gradientMap={gradientMap} />
+				<threeBandToonMaterial colorA={'#000000'} colorB={'#2b2958'} colorC={'#bfb3ad'} t1={0.33} t2={0.66} lightDir={[5,8,5]} />
 			</mesh>
 			{/* Rotating lid: change openRadians to open/close angle */}
 			<group rotation={[openRadians, 0, 0]}>
 				{/* Frame: bottom edge aligned to hinge position */}
 				<mesh position={[0, 0.7, 0]} castShadow>
 					<boxGeometry args={[2.2, 1.4, 0.08]} />
-					<meshToonMaterial color={bodyColor} gradientMap={gradientMap} />
+					<threeBandToonMaterial colorA={'#000000'} colorB={'#2b2958'} colorC={'#bfb3ad'} t1={0.33} t2={0.66} lightDir={[5,8,5]} />
 				</mesh>
 				{/* Screen panel with image, slightly in front of bezel */}
 				<mesh position={[0, 0.7, 0.045]}>
@@ -109,12 +110,13 @@ export function KillerLaptop(props) {
 	})
 
 	// Materials and palette
-	const gradientMap = useMemo(() => createGradientTexture(4), [])
+	// Use 3 discrete bands for a bold cel look (dark/mid/highlight)
+	const gradientMap = useMemo(() => createGradientTexture(3), [])
 	const bodyColor = new THREE.Color('#111111')
 	const plateColor = new THREE.Color('#1a1a1a')
 	const detailColor = new THREE.Color('#2a2a2a')
-	const edgeColor = new THREE.Color('#ffd400')
-	const accentColor = new THREE.Color('#ffd400')
+	const edgeColor = new THREE.Color('#a99d9b')
+	const accentColor = new THREE.Color('#a99d9b')
 
 	// Load screen image texture (sRGB, no tone mapping for crisp UI)
 	const screenTexture = useTexture(omgImage)
@@ -132,18 +134,18 @@ export function KillerLaptop(props) {
 			<group position={[0, 0, 0]}>
 				<mesh position={[0, 0.05, 0]} castShadow receiveShadow>
 					<boxGeometry args={[2.4, 0.1, 1.6]} />
-					<meshToonMaterial color={bodyColor} gradientMap={gradientMap} />
+					<threeBandToonMaterial colorA={'#000000'} colorB={'#2b2958'} colorC={'#bfb3ad'} t1={0.33} t2={0.66} lightDir={[5,8,5]} />
 				</mesh>
 				{/* Keyboard plate: slight inset panel */}
 				<mesh position={[0, 0.11, 0]} castShadow receiveShadow>
 					<boxGeometry args={[2.2, 0.02, 1.4]} />
-					<meshToonMaterial color={plateColor} gradientMap={gradientMap} />
+					<threeBandToonMaterial colorA={'#000000'} colorB={'#2b2958'} colorC={'#bfb3ad'} t1={0.33} t2={0.66} lightDir={[5,8,5]} />
 				</mesh>
 				<Keyboard gradientMap={gradientMap} />
 				{/* Touchpad: small panel near center-right */}
 				<mesh position={[0.5, 0.12, 0.3]} castShadow>
 					<boxGeometry args={[0.5, 0.005, 0.35]} />
-					<meshToonMaterial color={detailColor} gradientMap={gradientMap} />
+					<threeBandToonMaterial colorA={'#000000'} colorB={'#2b2958'} colorC={'#bfb3ad'} t1={0.33} t2={0.66} lightDir={[5,8,5]} />
 				</mesh>
 				{/* Accent strip: thin yellow bar along front */}
 				<mesh position={[0, 0.13, -0.7]}>
