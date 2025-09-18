@@ -1,11 +1,11 @@
 import './App.css'
-import SimpleCubeScene from './SimpleCubeScene'
+import BuildingScene from './BuildingScene'
 
 function App() {
   return (
     <>
       <div style={{ position: 'relative', width: '100%', height: '100vh' }}>
-        <SimpleCubeScene />
+        <BuildingScene />
       </div>
     </>
   )

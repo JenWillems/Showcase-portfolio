@@ -12,6 +12,7 @@ const ThreeBandToonMaterial = shaderMaterial(
 		t1: 0.33,
 		t2: 0.66,
 		lightDir: new THREE.Vector3(5, 8, 5),
+		invert: 0.0,
 	},
 	/* glsl */ `
 		varying vec3 vNormalW;
@@ -27,9 +28,11 @@ const ThreeBandToonMaterial = shaderMaterial(
 		uniform float t1;
 		uniform float t2;
 		uniform vec3 lightDir;
+		uniform float invert; // 0 normal, 1 inverted
 		varying vec3 vNormalW;
 		void main() {
 			float ndl = max(0.0, dot(normalize(vNormalW), normalize(lightDir)));
+			if (invert > 0.5) ndl = 1.0 - ndl;
 			vec3 col = ndl < t1 ? colorA : (ndl < t2 ? colorB : colorC);
 			gl_FragColor = vec4(col, 1.0);
 		}

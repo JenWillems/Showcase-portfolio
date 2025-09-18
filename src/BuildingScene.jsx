@@ -1,23 +1,17 @@
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
-import { useRef } from 'react'
-import { KillerLaptop } from './components/KillerLaptop'
+import KillerBuilding3D from './components/KillerBuilding'
+import KillerBuildingWithPopup from './components/KillerBuildingWithPopup'
 
-function RotatingLaptop() {
-	const ref = useRef()
-	useFrame((_, dt) => {
-		if (ref.current) {
-			ref.current.rotation.y += dt * 0.4
-		}
-	})
+function StaticBuilding({ onWindowClick }) {
 	return (
-		<group ref={ref}>
-			<KillerLaptop />
+		<group>
+			<KillerBuilding3D onWindowClick={onWindowClick} />
 		</group>
 	)
 }
 
-export default function SimpleCubeScene() {
+export default function BuildingScene() {
 	return (
 		<div style={{ position: 'relative', width: '100%', height: '100vh' }}>
 			<Canvas camera={{ position: [3, 3, 3], fov: 50 }} style={{ width: '100%', height: '100%' }}>
@@ -28,11 +22,13 @@ export default function SimpleCubeScene() {
 					<planeGeometry args={[20, 20]} />
 					<meshStandardMaterial color={'#111111'} />
 				</mesh>
-				<RotatingLaptop />
+				<StaticBuilding onWindowClick={(windowId) => {
+					// Dispatch custom event for popup component to handle
+					window.dispatchEvent(new CustomEvent('windowClick', { detail: windowId }))
+				}} />
 				<OrbitControls enablePan={false} />
 			</Canvas>
+			<KillerBuildingWithPopup />
 		</div>
 	)
 }
-
-
